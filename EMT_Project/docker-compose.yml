@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17.4
+    container_name: emt_postgres
+    environment:
+      POSTGRES_USER: emt
+      POSTGRES_PASSWORD: dace123
+      POSTGRES_DB: emt_project
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
