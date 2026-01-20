@@ -35,24 +35,10 @@ const Login = () => {
         authRepository
             .login(formData)
             .then((response) => {
-                login(response.data.token);
-                console.log(response.data.token);
-                console.log("For: " + response.data.username);
-                // let username = 'unavailable';
-                // authRepository
-                //     .getUser()
-                //     .then((response) => {
-                //         username = response.data.username;
-                //     })
-                //     .catch((error) => {
-                //         if (error.response && error.response.data) {
-                //             setErrorMessage(error.response.data);
-                //         } else {
-                //             setErrorMessage("Unexpected server error. Please try again.");
-                //         }
-                //     });
-                const to = `/user/${encodeURIComponent(response.data.username)}`;
-                navigate(to);
+                const token = response.data;
+                console.log(token);
+                login(token);
+                navigate(`/user/${encodeURIComponent(formData.username)}`);
             })
             .catch((error) => {
                 if (error.response && error.response.data) {
@@ -69,6 +55,7 @@ const Login = () => {
                 <Typography variant="h5" align="center" gutterBottom>Login</Typography>
                 <Box>
                     <TextField
+                        inputProps={{ "data-cy": "login-username" }}
                         fullWidth
                         label="Username"
                         name="username"
@@ -77,7 +64,9 @@ const Login = () => {
                         value={formData.username}
                         onChange={handleChange}
                     />
+
                     <TextField
+                        inputProps={{ "data-cy": "login-password" }}
                         fullWidth
                         label="Password"
                         name="password"
@@ -87,17 +76,14 @@ const Login = () => {
                         value={formData.password}
                         onChange={handleChange}
                     />
+
                     {errorMessage && (
-                        <Typography color="error" align="center" sx={{ mt: 2 }}>
+                        <Typography data-cy="login-error" color="error" align="center" sx={{ mt: 2 }}>
                             {errorMessage}
                         </Typography>
                     )}
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 2 }}
-                        onClick={handleSubmit}
-                    >
+
+                    <Button data-cy="login-submit" fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
                         Login
                     </Button>
                     <Button

@@ -57,8 +57,9 @@ const ResetPassword = () => {
             <Paper elevation={3} sx={{ padding: 4, mt: 8 }}>
                 <Typography variant="h5" align="center" gutterBottom>Reset Your Password</Typography>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <TextField
+                        id="rp-password"
                         fullWidth
                         type="password"
                         label="New Password"
@@ -70,6 +71,7 @@ const ResetPassword = () => {
                     />
 
                     <TextField
+                        id="rp-repeat"
                         fullWidth
                         type="password"
                         label="Repeat New Password"
@@ -86,17 +88,21 @@ const ResetPassword = () => {
                     {/*)}*/}
 
                     {errorMessage && (
-                        <Typography color="error" align="center" sx={{ mt: 2 }}>
+                        <Typography id="rp-error" data-cy="rp-error" color="error" align="center" sx={{ mt: 2 }}>
                             {errorMessage}
                         </Typography>
                     )}
+
                     {successMessage && (
-                        <Typography color="success" align="center" sx={{ mt: 2 }}>
+                        <Typography id="rp-success" data-cy="rp-success" color="success" align="center" sx={{ mt: 2 }}>
                             {successMessage}
                         </Typography>
                     )}
 
+
                     <Button
+                        data-cy="rp-submit"
+                        id="rp-submit"
                         fullWidth
                         variant="contained"
                         type="submit"

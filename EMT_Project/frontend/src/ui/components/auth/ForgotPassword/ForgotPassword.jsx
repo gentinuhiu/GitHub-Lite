@@ -60,8 +60,9 @@ const ForgotPassword = () => {
                         Enter your email to reset your password.
                     </Typography>
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} noValidate>
                         <TextField
+                            id="fp-email"
                             fullWidth
                             type="email"
                             label="Email address"
@@ -74,17 +75,19 @@ const ForgotPassword = () => {
                             placeholder="you@example.com"
                         />
                         {errorMessage && (
-                            <Typography color="error" align="center" sx={{ mb: 2 }}>
+                            <Typography id="fp-error" data-cy="fp-error" color="error" align="center" sx={{ mb: 2 }}>
                                 {errorMessage}
                             </Typography>
                         )}
 
                         {successMessage && (
-                            <Typography color="success.main" align="center" sx={{ mb: 2 }}>
+                            <Typography id="fp-success" data-cy="fp-success" color="success.main" align="center" sx={{ mb: 2 }}>
                                 {successMessage}
                             </Typography>
                         )}
                         <Button
+                            id="fp-submit"
+                            data-cy="fp-submit"
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -96,7 +99,10 @@ const ForgotPassword = () => {
                     </form>
 
                     <Box sx={{ mt: 2 }}>
-                        <Button fullWidth variant="outlined" onClick={() => navigate("/login")}>
+                        <Button
+                            data-cy="fp-back"
+                            id="fp-back"
+                            fullWidth variant="outlined" onClick={() => navigate("/login")}>
                             Back to Login
                         </Button>
                     </Box>
