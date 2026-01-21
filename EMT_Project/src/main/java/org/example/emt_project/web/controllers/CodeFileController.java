@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/code-files")
+@CrossOrigin("http://localhost:3000")
 public class CodeFileController {
     private final CodeFileApplicationService codeFileApplicationService;
 

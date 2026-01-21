@@ -12,12 +12,15 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name="repository")
 public class Repository {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
+    @Lob
+    @Column(name = "zip_data")
     private byte [] zipData;
     private String localPath;
     private PROGRAMMING_LANGUAGE programmingLanguage;

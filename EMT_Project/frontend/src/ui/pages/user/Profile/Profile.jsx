@@ -212,7 +212,7 @@ const ProfilePage = () => {
                         <Box sx={{ display: "grid", gap: 2 }}>
                             {repos.map((repo) => {
                                 const repoId = String(repo.id);
-                                const to = `/repositories/${encodeURIComponent(repoId)}`;
+                                const to = `/repositories/${encodeURIComponent(username)}/${encodeURIComponent(repoId)}`;
 
                                 return (
                                     <Paper

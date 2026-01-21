@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/repositories")
 public class RepositoryController {
     private final RepositoryApplicationService repositoryApplicationService;
@@ -118,8 +119,14 @@ public class RepositoryController {
 
     @CrossOrigin("http://localhost:3000")
     @GetMapping("/identify/{repo}")
-    public ResponseEntity<DisplayUserDto> identifyUserToRepository(@PathVariable Long repo, @AuthenticationPrincipal User user){
-        return ResponseEntity.ok(repositoryApplicationService.identify(repo, user.getUsername()));
+    public ResponseEntity<DisplayUserDto> identifyUserToRepository(
+            @PathVariable Long repo,
+            @AuthenticationPrincipal User user
+    ) {
+        String username = (user == null) ? null : user.getUsername();
+        return ResponseEntity.ok(
+                repositoryApplicationService.identify(repo, username)
+        );
     }
 
     @PostMapping(value = "/upload-dir/{repo_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

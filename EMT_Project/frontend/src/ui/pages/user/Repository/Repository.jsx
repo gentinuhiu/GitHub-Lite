@@ -229,7 +229,7 @@ const Repository = () => {
                 isPublic: editPublic,
             });
             setEditOpen(false);
-            window.location.reload(); // refresh as requested
+            window.location.assign(window.location.href);
         } catch (e) {
             console.error("Update failed", e?.response || e);
             // optionally surface an error UI here
@@ -464,22 +464,27 @@ const Repository = () => {
 
     const [isOwner, setIsOwner] = useState(false);
     useEffect(() => {
-        if (!id) return;                // or if it needs repo?.id: if (!repo?.id) return;
+        if (!id) return;
+
         let cancelled = false;
-        (async () => {
-            try {
-                const res = await repositoryRepository.identify(id); // or repo.id
+
+        repositoryRepository
+            .identify(id)
+            .then((res) => {
+                if (cancelled) return;
+                setIsOwner(Boolean(res?.data?.ownProfile));
+                setUser(res?.data ?? null);
+            })
+            .catch(() => {
                 if (!cancelled) {
-                    setIsOwner(Boolean(res?.data?.ownProfile));
-                    setUser(res?.data);
+                    setIsOwner(false);
+                    setUser(null);
                 }
-            } catch (e) {
-                if (!cancelled) setIsOwner(false);
-                console.error("identify failed", e?.response || e);
-            }
-        })();
+            });
+
         return () => { cancelled = true; };
-    }, [id]); // or [repo?.id]
+    }, [id]);
+
 
     // Right sidebar
     const [collabs, setCollabs] = useState([]);
@@ -514,17 +519,16 @@ const Repository = () => {
 
     // 1) Base repo load
     useEffect(() => {
+        if (!id || !username) return;
+
         setLoadingRepo(true);
         repositoryRepository
-            .getRepository(username, id)
+            .getRepository(id)
             .then((res) => setRepo(res.data))
+            .catch(() => setRepo(null))
             .finally(() => setLoadingRepo(false));
-
-        // const userRes = repositoryRepository.identify(id);
-        // const u = userRes.data;
-        // setUser(u);
-        // isOwner = Boolean(user?.ownProfile);
     }, [username, id]);
+
 
     // 2) After repo exists, fetch sidebars + structure
     useEffect(() => {
@@ -702,7 +706,7 @@ const Repository = () => {
                             </Menu>
 
                             {/* ⋮ actions */}
-                            <IconButton onClick={openMenu}>
+                            <IconButton data-testid="repo-actions" onClick={openMenu}>
                                 <MoreVertIcon/>
                             </IconButton>
                         </Typography>
@@ -851,6 +855,7 @@ const Repository = () => {
                                             <Tooltip title="Open raw">
                         <span>
                           <IconButton
+                              data-testid="open-raw"
                               size="small"
                               onClick={() =>
                                   repositoryRepository.openRawInNewTab(repo.id, filePath)
@@ -863,7 +868,7 @@ const Repository = () => {
 
                                             <Tooltip title="Download">
     <span>
-      <IconButton size="small" onClick={handleDownload}>
+      <IconButton data-testid="download-file" size="small" onClick={handleDownload}>
         <DownloadIcon fontSize="small"/>
       </IconButton>
     </span>
@@ -871,7 +876,7 @@ const Repository = () => {
 
                                             <Tooltip title="Delete">
                                                 <span>
-                                                 <IconButton size="small" onClick={handleDeleteFile}>
+                                                 <IconButton data-testid="delete-file" size="small" onClick={handleDeleteFile}>
                                                      <DeleteOutlineIcon fontSize="small"></DeleteOutlineIcon>
                                                  </IconButton>
 
@@ -923,6 +928,7 @@ const Repository = () => {
                                     <List dense disablePadding>
                                         {currentChildren.map((node) => (
                                             <ListItemButton
+                                                data-testid={`node-${node.name}`}
                                                 key={`${joinPath(path)}/${node.name}`}
                                                 onClick={() => goInto(node)}
                                                 sx={{px: 1.5}}
@@ -1161,6 +1167,7 @@ const Repository = () => {
             </Dialog>
 
             <input
+                data-testid="upload-file-input"
                 type="file"
                 hidden
                 ref={fileInputRef}
@@ -1169,6 +1176,7 @@ const Repository = () => {
 
             <input
                 type="file"
+                data-testid="upload-zip-input"
                 hidden
                 accept=".zip,application/zip,application/x-zip-compressed,application/octet-stream"
                 ref={zipInputRef}

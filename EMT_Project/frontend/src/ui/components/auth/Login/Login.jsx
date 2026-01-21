@@ -36,8 +36,8 @@ const Login = () => {
             .login(formData)
             .then((response) => {
                 const token = response.data;
-                console.log(token);
-                login(token);
+                console.log(token.token);
+                login(token.token);
                 navigate(`/user/${encodeURIComponent(formData.username)}`);
             })
             .catch((error) => {

@@ -26,12 +26,14 @@ const App = () => {
                     <Route path="/forgot-password" element={<ForgotPassword/>}/>
                     <Route path="/reset-password" element={<ResetPassword/>}/>
                     <Route path="/search" element={<SearchResults />} />
+
+                    <Route path="/repositories/:username/:id" element={<Repository />} />
+
                     {/*<Route path="/profile" element={<Layout/>}>*/}
                     {/*<Route index element={<HomePage/>}/>*/}
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/user" element={<UserBlank />} />
                         <Route path="/user/:username" element={<Profile/>}/>
-                        <Route path="/repositories/:id" element={<Repository />} />
                         <Route path="/biography/edit" element={<EditBiography/>}/>
                         {/*<Route path="products" element={<ProductsPage/>}/>*/}
                         {/*<Route path="products/:id" element={<ProductDetails/>}/>*/}

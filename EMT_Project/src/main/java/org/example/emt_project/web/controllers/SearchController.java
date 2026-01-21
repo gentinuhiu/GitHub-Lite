@@ -14,6 +14,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/search")
+@CrossOrigin("http://localhost:3000")
 public class SearchController {
     private final UserApplicationService userApplicationService;
     private final RepositoryApplicationService repositoryApplicationService;

@@ -4,7 +4,7 @@ const repositoryRepository = {
     getAllForUser: async (data) => {
         return axiosInstance.get(`/repositories/${encodeURIComponent(data)}`);
     },
-    getRepository: async (username, id) => {
+    getRepository: async (id) => {
         return axiosInstance.get(`/repositories/details/${encodeURIComponent(id)}`);
     },
 
@@ -107,8 +107,11 @@ const repositoryRepository = {
         });
     },
 
-    addCollaborator: async (repoId, data) => {
-        return axiosInstance.post(`/repositories/add-collaborator/${encodeURIComponent(repoId)}`, { data });
+    addCollaborator: async (repoId, username) => {
+        return axiosInstance.post(
+            `/repositories/add-collaborator/${encodeURIComponent(repoId)}`,
+            { username }
+        );
     },
 
     searchGlobal: async (query) => {
